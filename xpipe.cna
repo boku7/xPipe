@@ -20,6 +20,6 @@ alias xpipe {
     $data = readb($handle, -1);
     closef($handle);
     $args = bof_pack($1, "z",$2);
-    btask($1, "xpipe (Bobby Cooke|@0xBoku|github.com/boku7)");
+    btask($1, "xpipe (IBM X-Force Red|Bobby Cooke|@0xBoku");
     beacon_inline_execute($1, $data, "go", $args);
 }
