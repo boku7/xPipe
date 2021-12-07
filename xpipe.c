@@ -1,3 +1,5 @@
+// IBM X-Force Red|Bobby Cooke|@0xBoku
+// Allot of code is pulled or derived from github.com/trustedsec/CS-Situational-Awareness-BOF & github.com/EspressoCake/HandleKatz_BOF
 #include <windows.h>
 #include "beacon.h"
 
@@ -19,7 +21,6 @@ WINBASEAPI LPWSTR WINAPI KERNEL32$lstrcatW( LPWSTR lpString1, LPCWSTR lpString2)
 WINBASEAPI HANDLE WINAPI KERNEL32$CreateFileW(LPCWSTR lpFileName, DWORD dwDesiredAccess, DWORD dwShareMode, LPSECURITY_ATTRIBUTES lpSecurityAttributes, DWORD dwCreationDisposition, DWORD dwFlagsAndAttributes, HANDLE hTemplateFile);
 WINBASEAPI DWORD WINAPI KERNEL32$GetLastError (VOID);
 WINBASEAPI VOID WINAPI KERNEL32$SetLastError (DWORD dwErrCode);
-DECLSPEC_IMPORT HGLOBAL KERNEL32$GlobalAlloc(UINT uFlags, SIZE_T dwBytes);
 WINBASEAPI VOID WINAPI KERNEL32$Sleep (DWORD dwMilliseconds);
 WINBASEAPI WINBOOL WINAPI KERNEL32$CloseHandle (HANDLE hObject);
 WINADVAPI DWORD WINAPI ADVAPI32$GetSecurityInfo(HANDLE handle, int ObjectType, SECURITY_INFORMATION SecurityInfo, PSID *ppsidOwner, PSID *ppsidGroup, PACL *ppDacl, PACL *ppSacl, PSECURITY_DESCRIPTOR *ppSecurityDescriptor);
@@ -31,9 +32,7 @@ WINBASEAPI size_t __cdecl MSVCRT$strlen(const char *_Str);
 #define intAlloc(size) KERNEL32$HeapAlloc(KERNEL32$GetProcessHeap(), HEAP_ZERO_MEMORY, size)
 #define intFree(addr) KERNEL32$HeapFree(KERNEL32$GetProcessHeap(), 0, addr)
 
-
 typedef struct { LONG Status; ULONG Information; } IO_STATUS_BLOCK;
-
 typedef struct _FILE_DIRECTORY_INFORMATION {
     ULONG                   NextEntryOffset;
     ULONG                   FileIndex;
@@ -47,13 +46,11 @@ typedef struct _FILE_DIRECTORY_INFORMATION {
     ULONG                   FileNameLength;
     WCHAR                   FileName[1];
 } FILE_DIRECTORY_INFORMATION, * PFILE_DIRECTORY_INFORMATION;
-
 typedef LONG (NTAPI * NtQueryDirectoryFile_t)(HANDLE, HANDLE, PVOID, PVOID, IO_STATUS_BLOCK*, PVOID, ULONG, UINT, BOOL, LPVOID, BOOL);
 
 void getPipeACL(wchar_t * pipeName){
     formatp stringFormatObject;
     BeaconFormatAlloc(&stringFormatObject, 64 * 1024);
-
     DWORD dwRtnCode = 0;
     PSID pOwnerSid, pGroupSid = NULL;
     BOOL bRtnBool = TRUE;
@@ -70,11 +67,9 @@ void getPipeACL(wchar_t * pipeName){
     BOOL DaclPresent;
     BOOL DaclDefaulted;
     BOOL Error = FALSE, Ret = FALSE;
-
-    // Get the handle to named pipe
+	
+    // Get handle to named pipe
     HANDLE hPipe = NULL;
- //   LPWSTR pipeName = argv[1];
-    //LPWSTR pipeName = L"\\\\.\\pipe\\atsvc";
     BeaconFormatPrintf(&stringFormatObject,"Pipe: %ls\n",pipeName);
     hPipe = KERNEL32$CreateFileW(
         pipeName,
@@ -84,8 +79,8 @@ void getPipeACL(wchar_t * pipeName){
         OPEN_EXISTING,
         FILE_ATTRIBUTE_NORMAL,
         NULL);
-
-        // Get the owner SID of the file.
+	
+    // Get the owner SID of the file.
     ADVAPI32$GetSecurityInfo(
         hPipe,
         SE_FILE_OBJECT,
@@ -109,9 +104,7 @@ void getPipeACL(wchar_t * pipeName){
     // Reallocate memory for the buffers.
     AcctName = (LPWSTR)intAlloc((dwAcctName+2) * 2);
     DomainName = (LPWSTR)intAlloc((dwDomainName+2) * 2);
-//    AcctName = (LPWSTR)KERNEL32$GlobalAlloc(GMEM_FIXED, dwAcctName);
-//    DomainName = (LPWSTR)KERNEL32$GlobalAlloc(GMEM_FIXED, dwDomainName);
-
+	
     // Second call to LookupAccountSid to get the account name.
     ADVAPI32$LookupAccountSidW(
         NULL,                   // name of local or remote computer
