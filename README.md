@@ -1,6 +1,14 @@
-# xPipe BOF
+# xPipe BOF (x64)
 Cobalt Strike Beacon Object File (BOF) to list active Named Pipes & return their Discretionary Access Control List (DACL) permissions.
 
+## Usage
+
+
+## Compile with x64 MinGW:
+```bash
+x86_64-w64-mingw32-gcc xpipe.c -c -o xpipe.o -Os
+```
++ Only tested from macOS
 
 ## Credits & References
 #### Cobalt Strike BOF Code Projects 
