@@ -42,6 +42,13 @@ x86_64-w64-mingw32-gcc xpipe.c -c -o xpipe.o -Os
 ## Why I Created This?
 Recently I have been exploring C2 channels using SMB/pipes and also dabbling in privilege escalation research. To better understand how windows pipes worked, I decided to create some projects. I personally find that getting my hands dirty with the windows APIs, debugging, and tinkering is the best way I learn.
 
+## To Do's
++ For pipes which we don't have access to query, the BOF will just timeout after 5 seconds. Create error handler which checks if access was denied and return error code to operator. As of now it will just timeout after 5 seconds and return nothing.
++ Code cleanup, make sure there are no leaks and handles are closed, etc.
+
+## Detection & Mitigation
+This BOF is for situational awareness. It does not perform any malicious behavoir as of December 7th 2021. For detecting pipe enumeration for threat actors in their enumeration phase, it may be possible to detect attempts to query all named pipes which exist within `\\.\pipe\*`.
+
 ## Credits & References
 #### Cobalt Strike BOF Code Projects 
 + [trustedsec/CS-Situational-Awareness-BOF/src/SA/cacls/](https://github.com/trustedsec/CS-Situational-Awareness-BOF/blob/master/src/SA/cacls/entry.c)
