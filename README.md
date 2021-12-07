@@ -2,7 +2,7 @@
 Cobalt Strike Beacon Object File (BOF) which lists running Named Pipes & returns their discretionary Access Control List (DACL) permissions.
 
 
-### Credits & References
+## Credits & References
 #### Cobalt Strike BOF Code Projects 
 + [trustedsec/CS-Situational-Awareness-BOF/src/SA/cacls/](https://github.com/trustedsec/CS-Situational-Awareness-BOF/blob/master/src/SA/cacls/entry.c)
   + The code for the `getPipeACL()` function is derived from TrustedSecs awesome work from the CACL BOF project. 
