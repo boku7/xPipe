@@ -1,5 +1,5 @@
 # xPipe BOF
-Cobalt Strike Beacon Object File (BOF) which lists running Named Pipes & returns their discretionary Access Control List (DACL) permissions.
+Cobalt Strike Beacon Object File (BOF) to list active Named Pipes & return their discretionary Access Control List (DACL) permissions.
 
 
 ## Credits & References
