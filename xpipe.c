@@ -337,7 +337,7 @@ void go(char * args, int len) {
     size_t pipeNameLen = 0;
     BeaconDataParse(&parser, args, len);
     pipeName = BeaconDataExtract(&parser, NULL);
-    BeaconPrintf(CALLBACK_OUTPUT,"pipeName: %s", pipeName);
+    //BeaconPrintf(CALLBACK_OUTPUT,"pipeName: %s", pipeName);
     if (pipeName[0] == 'L'){
         pipelist();
         return;
