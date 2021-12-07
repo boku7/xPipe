@@ -1,14 +1,46 @@
 # xPipe BOF (x64)
-Cobalt Strike Beacon Object File (BOF) to list active Named Pipes & return their Discretionary Access Control List (DACL) permissions.
+Cobalt Strike Beacon Object File (BOF) to list active Pipes & return their Owner & Discretionary Access Control List (DACL) permissions.
+
+![](/xpipe.png)
 
 ## Usage
+### List All Local Active Pipes
+To list all the pipes simply run the `xpipe` command from Cobalt Strikes interactive beacon console after importing the `xpipe.cna` agressor script.
+```
+beacon> xpipe \\.\pipe\lsass
+[*] xpipe (IBM X-Force Red|Bobby Cooke|@0xBoku)
+Pipe: \\.\pipe\lsass
+Owner: Administrators\BUILTIN
+Everyone
+   + SYNCHRONIZE
+   + READ_CONTROL
+   + FILE_WRITE_DATA
+   + FILE_READ_DATA
+   + FILE_WRITE_ATTRIBUTES
+   + FILE_READ_ATTRIBUTES
+ANONYMOUS LOGON\NT AUTHORITY
+   + SYNCHRONIZE
+++
+```
 
+### Show Pipe Owner & DACL Permissions
+To show the Owner & DACL permissions of a pipe, simply supply the pipe name as the first argument to the `xpipe` command.
+```
+beacon> xpipe
+[*] xpipe (IBM X-Force Red|Bobby Cooke|@0xBoku)
+\\.\pipe\InitShutdown
+\\.\pipe\lsass
+++
+```
 
 ## Compile with x64 MinGW:
 ```bash
 x86_64-w64-mingw32-gcc xpipe.c -c -o xpipe.o -Os
 ```
 + Only tested from macOS
+
+## Why I Created This?
+Recently I have been exploring C2 channels using SMB/pipes and also dabbling in privilege escalation research. To better understand how windows pipes worked, I decided to create some projects. I personally find that getting my hands dirty with the windows APIs, debugging, and tinkering is the best way I learn.
 
 ## Credits & References
 #### Cobalt Strike BOF Code Projects 
