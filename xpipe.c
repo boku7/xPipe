@@ -49,10 +49,10 @@ typedef struct _FILE_DIRECTORY_INFORMATION {
 typedef LONG (NTAPI * NtQueryDirectoryFile_t)(HANDLE, HANDLE, PVOID, PVOID, IO_STATUS_BLOCK*, PVOID, ULONG, UINT, BOOL, LPVOID, BOOL);
 
 void getPipeACL(wchar_t * pipeName){
-    formatp stringFormatObject;
-    BeaconFormatAlloc(&stringFormatObject, 64 * 1024);
+    formatp stringFormatObject;  // Cobalt Strike beacon format object we will pass strings too
+    BeaconFormatAlloc(&stringFormatObject, 64 * 1024); // allocate memory for our string blob
     DWORD dwRtnCode = 0;
-    PSID pOwnerSid, pGroupSid = NULL;
+    PSID pOwnerSid, pGroupSid = NULL; // used to return the owner of the pipe
     BOOL bRtnBool = TRUE;
     LPWSTR AcctName = NULL;
     LPWSTR DomainName = NULL;
@@ -62,7 +62,7 @@ void getPipeACL(wchar_t * pipeName){
     PACL file_dacl = NULL;
     PSECURITY_DESCRIPTOR SecurityDescriptor;
     DWORD SDSize = 0;
-    SecurityDescriptor = (PSECURITY_DESCRIPTOR)intAlloc(SDSize);
+    SecurityDescriptor = (PSECURITY_DESCRIPTOR)intAlloc(SDSize); // allocate memory for the security descriptor we will get for the pipe
     PACL Dacl;
     BOOL DaclPresent;
     BOOL DaclDefaulted;
@@ -178,44 +178,44 @@ void getPipeACL(wchar_t * pipeName){
                             &DomainSize,
                             &Use))
                         {
-							if (KERNEL32$GetLastError() != ERROR_INSUFFICIENT_BUFFER)
-							{
-								Error = TRUE;
-								break;
-							}
-							Name = (LPWSTR)intAlloc((NameSize + DomainSize) * 2);
-							if (Name == NULL)
-							{
-								KERNEL32$SetLastError(ERROR_NOT_ENOUGH_MEMORY);
-								Error = TRUE;
-								break;
-							}
-							Domain = Name + NameSize;
-							Name[0] = L'\0';
-							if (DomainSize != 0)
-								Domain[0] = L'\0';
-							if (ADVAPI32$LookupAccountSidW(NULL,
-								Sid,
-								Name,
-								&NameSize,
-								Domain,
-								&DomainSize,
-								&Use))
-							{
+                            if (KERNEL32$GetLastError() != ERROR_INSUFFICIENT_BUFFER)
+                            {
+                                Error = TRUE;
+                                break;
+                            }
+                            Name = (LPWSTR)intAlloc((NameSize + DomainSize) * 2);
+                            if (Name == NULL)
+                            {
+                                KERNEL32$SetLastError(ERROR_NOT_ENOUGH_MEMORY);
+                                Error = TRUE;
+                                break;
+                            }
+                            Domain = Name + NameSize;
+                            Name[0] = L'\0';
+                            if (DomainSize != 0)
+                                Domain[0] = L'\0';
+                            if (ADVAPI32$LookupAccountSidW(NULL,
+                                Sid,
+                                Name,
+                                &NameSize,
+                                Domain,
+                                &DomainSize,
+                                &Use))
+                            {
                                 if (Domain[0] == 0x00){
-									BeaconFormatPrintf(&stringFormatObject,"%ls\n",Name);
+                                    BeaconFormatPrintf(&stringFormatObject,"%ls\n",Name);
                                 }
                                 else {
-									BeaconFormatPrintf(&stringFormatObject,"%ls\\%ls\n",Name,Domain);
+                                    BeaconFormatPrintf(&stringFormatObject,"%ls\\%ls\n",Name,Domain);
                                 }
-							}
+                            }
                         }
                         // The access mask of the ACE will have a bunch of bits set. For each bit that is set, it maps to a permission 
                         // FILE_ALL_ACCESS #define FILE_ALL_ACCESS (STANDARD_RIGHTS_REQUIRED | SYNCHRONIZE | 0x1FF)
-						if (Ace->Mask == 0x1f01ff)
-						{
-							BeaconFormatPrintf(&stringFormatObject,"   + FILE_ALL_ACCESS\n");
-						}
+                        if (Ace->Mask == 0x1f01ff)
+                        {
+                            BeaconFormatPrintf(&stringFormatObject,"   + FILE_ALL_ACCESS\n");
+                        }
                         else {
                             // SYNCHRONIZE #define SYNCHRONIZE   (0x00100000L)
                             if (Ace->Mask & 0x100000)
@@ -299,7 +299,7 @@ void pipelist(){
             else { return; }
         }
         pipe_info = dir_info;
-        while (1){// This loop prints all pipes located in the current directory we are enumerating
+        while (1){            // This loop prints all pipes located in the current directory we are enumerating
             outptr += 18;
             outptr += pipe_info->FileNameLength;
             overflowChk = (unsigned __int64)outptr - (unsigned __int64)output; // make sure we don't crash beacon
@@ -331,7 +331,7 @@ void pipelist(){
 }
 
 void go(char * args, int len) {
-	datap parser;
+    datap parser;
     char * pipeName = NULL;
     wchar_t * wPipeName = NULL;
     size_t pipeNameLen = 0;
@@ -345,7 +345,7 @@ void go(char * args, int len) {
         pipeNameLen = MSVCRT$strlen(pipeName);
         pipeNameLen = pipeNameLen*2+4;
         wPipeName = (wchar_t *)intAlloc(pipeNameLen);
-        toWideChar(pipeName,wPipeName,pipeNameLen);
+        toWideChar(pipeName,wPipeName,pipeNameLen); // Convert the ASCII pipe name from beacon to a Unicode pipe name
         getPipeACL(wPipeName);
     }
 }
