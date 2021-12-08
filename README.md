@@ -1,4 +1,4 @@
-# xPipe BOF (x64)
+# xPipe Cobalt Strike BOF (x64)
 Cobalt Strike Beacon Object File (BOF) to list active Pipes & return their Owner & Discretionary Access Control List (DACL) permissions.
 
 ![](/xpipe.png)
@@ -45,9 +45,10 @@ Recently I have been exploring C2 channels using SMB/pipes and also dabbling in 
 ## To Do's
 + For pipes which we don't have access to query, the BOF will just timeout after 5 seconds. Create error handler which checks if access was denied and return error code to operator. As of now it will just timeout after 5 seconds and return nothing.
 + Code cleanup, make sure there are no leaks and handles are closed, etc.
++ Update the `pipelist()` function use the same CS beacon print formatting as the `getPipeACL()` function. Its cleaner and less prone to errors.
 
 ## Detection & Mitigation
-This BOF is for situational awareness. It does not perform any malicious behavoir as of December 7th 2021. For detecting pipe enumeration for threat actors in their enumeration phase, it may be possible to detect attempts to query all named pipes which exist within `\\.\pipe\*`.
+This BOF is for situational awareness. It does not perform any malicious behavior as of December 7th 2021. For detecting pipe enumeration for threat actors in their enumeration phase, it may be possible to detect attempts to query all named pipes which exist within `\\.\pipe\*`.
 
 ## Credits & References
 #### Cobalt Strike BOF Code Projects 
