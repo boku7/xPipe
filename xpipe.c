@@ -165,7 +165,6 @@ void getPipeACL(wchar_t * pipeName){
                         DWORD DomainSize = 0;
                         LPWSTR Name = NULL;
                         LPWSTR Domain = NULL;
-                        LPWSTR SidString = NULL;
                         DWORD IndentAccess = 0;
 
                         DWORD AccessMask = Ace->Mask;
@@ -209,6 +208,9 @@ void getPipeACL(wchar_t * pipeName){
                                     BeaconFormatPrintf(&stringFormatObject,"%ls\\%ls\n",Name,Domain);
                                 }
                             }
+                            intFree(Name);
+                            Name = NULL;
+                            Domain = NULL;
                         }
                         // The access mask of the ACE will have a bunch of bits set. For each bit that is set, it maps to a permission 
                         // FILE_ALL_ACCESS #define FILE_ALL_ACCESS (STANDARD_RIGHTS_REQUIRED | SYNCHRONIZE | 0x1FF)
@@ -258,6 +260,8 @@ void getPipeACL(wchar_t * pipeName){
                 }
             }
         }
+        intFree(SecurityDescriptor);
+        SecurityDescriptor = NULL;
     }
     int sizeOfObject   = 0;
     char* outputString = NULL;
