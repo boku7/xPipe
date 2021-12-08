@@ -3,6 +3,7 @@ Cobalt Strike Beacon Object File (BOF) to list active Pipes & return their Owner
 
 ![](/xpipe.png)
 
+https://github.com/xforcered/xPipe & https://github.com/boku7/xPipe
 ## Usage
 ### List All Local Active Pipes
 To list all the pipes simply run the `xpipe` command from Cobalt Strikes interactive beacon console after importing the `xpipe.cna` agressor script.

@@ -1,4 +1,4 @@
-// IBM X-Force Red|Bobby Cooke|@0xBoku
+// IBM X-Force Red|Bobby Cooke|@0xBoku | https://github.com/xforcered/xPipe & https://github.com/boku7/xPipe
 // Allot of code is pulled or derived from github.com/trustedsec/CS-Situational-Awareness-BOF & github.com/EspressoCake/HandleKatz_BOF
 #include <windows.h>
 #include "beacon.h"
