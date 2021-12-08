@@ -6,17 +6,21 @@ Cobalt Strike Beacon Object File (BOF) to list active Pipes & return their Owner
 https://github.com/xforcered/xPipe & https://github.com/boku7/xPipe
 ## Usage
 ### List All Local Active Pipes
-To list all the pipes simply run the `xpipe` command from Cobalt Strikes interactive beacon console after importing the `xpipe.cna` aggressor script.
+To list all the pipes, simply run the `xpipe` command from Cobalt Strikes interactive beacon console after importing the `xpipe.cna` aggressor script.
 ```
 beacon> xpipe
 [*] xpipe (IBM X-Force Red|Bobby Cooke|@0xBoku)
 \\.\pipe\InitShutdown
 \\.\pipe\lsass
+\\.\pipe\ntsvcs
+\\.\pipe\scerpc
+\\.\pipe\atsvc
 ++
 ```
 
 ### Show Pipe Owner & DACL Permissions
 To show the Owner & DACL permissions of a pipe, simply supply the pipe name as the first argument to the `xpipe` command.
++ If you lack permissions to query the pipe, the BOF will timeout after 5 seconds and return thread control to the operator.
 ```
 beacon> xpipe \\.\pipe\lsass
 [*] xpipe (IBM X-Force Red|Bobby Cooke|@0xBoku)
